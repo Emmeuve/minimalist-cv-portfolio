@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 
@@ -32,6 +32,7 @@ interface FormErrors {
 
 const ContactForm = () => {
   const { toast } = useToast();
+  const sectionRef = useRef<HTMLElement>(null);
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
@@ -40,6 +41,14 @@ const ContactForm = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const leftY = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const rightY = useTransform(scrollYProgress, [0, 1], [30, -30]);
 
   const validateField = (field: keyof ContactFormData, value: string) => {
     const fieldSchema = contactSchema.shape[field];
@@ -65,7 +74,6 @@ const ContactForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     
-    // Clear error on change
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -98,8 +106,6 @@ const ContactForm = () => {
     }
 
     setIsSubmitting(true);
-    
-    // Simulate submission delay
     await new Promise((resolve) => setTimeout(resolve, 1500));
     
     setIsSubmitting(false);
@@ -110,7 +116,6 @@ const ContactForm = () => {
       description: "Gracias por tu mensaje. Te responderé pronto.",
     });
 
-    // Reset form after success
     setTimeout(() => {
       setFormData({ name: "", email: "", message: "" });
       setIsSuccess(false);
@@ -118,182 +123,194 @@ const ContactForm = () => {
   };
 
   return (
-    <section className="w-full py-16 md:py-24 bg-background">
+    <section id="contacto" ref={sectionRef} className="w-full py-24 md:py-32 bg-background overflow-hidden">
       <div className="container px-4 md:px-8">
-        <div className="max-w-2xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-caption mb-2 text-muted-foreground">Contacto</h2>
-            <p className="text-title text-2xl md:text-3xl mb-8">
-              ¿Tienes un proyecto en mente?
-            </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+          {/* Left Column - Info */}
+          <motion.div style={{ y: leftY }}>
+            <motion.h2
+              className="text-caption mb-6 text-muted-foreground"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              Contacto
+            </motion.h2>
+            <motion.p
+              className="text-body text-lg md:text-xl lg:text-2xl leading-relaxed mb-8"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              ¿Tienes un proyecto en mente? Me encantaría escucharte 
+              y explorar cómo puedo ayudarte a hacerlo realidad.
+            </motion.p>
+            
+            <motion.div
+              className="space-y-4 text-body text-muted-foreground"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <p>email@tudominio.com</p>
+              <p>LinkedIn · Dribbble · Behance</p>
+            </motion.div>
           </motion.div>
 
-          <motion.form
-            onSubmit={handleSubmit}
-            className="space-y-6"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {/* Name Field */}
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-caption text-muted-foreground">
-                Nombre
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={`w-full bg-transparent border-b-2 py-3 text-body text-lg focus:outline-none transition-colors ${
-                  errors.name
-                    ? "border-destructive"
-                    : "border-border focus:border-foreground"
-                }`}
-                placeholder="Tu nombre"
-                disabled={isSubmitting}
-              />
-              {errors.name && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-sm text-destructive"
-                >
-                  {errors.name}
-                </motion.p>
-              )}
-            </div>
-
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-caption text-muted-foreground">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={`w-full bg-transparent border-b-2 py-3 text-body text-lg focus:outline-none transition-colors ${
-                  errors.email
-                    ? "border-destructive"
-                    : "border-border focus:border-foreground"
-                }`}
-                placeholder="tu@email.com"
-                disabled={isSubmitting}
-              />
-              {errors.email && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-sm text-destructive"
-                >
-                  {errors.email}
-                </motion.p>
-              )}
-            </div>
-
-            {/* Message Field */}
-            <div className="space-y-2">
-              <label htmlFor="message" className="text-caption text-muted-foreground">
-                Mensaje
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                rows={5}
-                className={`w-full bg-transparent border-b-2 py-3 text-body text-lg focus:outline-none transition-colors resize-none ${
-                  errors.message
-                    ? "border-destructive"
-                    : "border-border focus:border-foreground"
-                }`}
-                placeholder="Cuéntame sobre tu proyecto..."
-                disabled={isSubmitting}
-              />
-              {errors.message && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-sm text-destructive"
-                >
-                  {errors.message}
-                </motion.p>
-              )}
-              <p className="text-xs text-muted-foreground text-right">
-                {formData.message.length}/1000
-              </p>
-            </div>
-
-            {/* Submit Button */}
-            <motion.button
-              type="submit"
-              disabled={isSubmitting || isSuccess}
-              className={`w-full py-4 text-body font-medium tracking-wide transition-all duration-300 ${
-                isSuccess
-                  ? "bg-green-600 text-primary-foreground"
-                  : "bg-primary text-primary-foreground hover:opacity-90"
-              }`}
-              whileHover={{ scale: isSubmitting || isSuccess ? 1 : 1.01 }}
-              whileTap={{ scale: isSubmitting || isSuccess ? 1 : 0.99 }}
-            >
-              {isSubmitting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
+          {/* Right Column - Form */}
+          <motion.div style={{ y: rightY }}>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="space-y-2"
+              >
+                <label htmlFor="name" className="text-caption block text-muted-foreground">
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`w-full bg-transparent border-b-2 py-3 text-body text-lg focus:outline-none transition-colors ${
+                    errors.name
+                      ? "border-destructive"
+                      : "border-border focus:border-foreground"
+                  }`}
+                  placeholder="Tu nombre"
+                  disabled={isSubmitting}
+                />
+                {errors.name && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-destructive"
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  Enviando...
-                </span>
-              ) : isSuccess ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    {errors.name}
+                  </motion.p>
+                )}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="space-y-2"
+              >
+                <label htmlFor="email" className="text-caption block text-muted-foreground">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`w-full bg-transparent border-b-2 py-3 text-body text-lg focus:outline-none transition-colors ${
+                    errors.email
+                      ? "border-destructive"
+                      : "border-border focus:border-foreground"
+                  }`}
+                  placeholder="tu@email.com"
+                  disabled={isSubmitting}
+                />
+                {errors.email && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-destructive"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  ¡Enviado!
-                </span>
-              ) : (
-                "Enviar mensaje"
-              )}
-            </motion.button>
-          </motion.form>
+                    {errors.email}
+                  </motion.p>
+                )}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="space-y-2"
+              >
+                <label htmlFor="message" className="text-caption block text-muted-foreground">
+                  Mensaje
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  rows={4}
+                  className={`w-full bg-transparent border-b-2 py-3 text-body text-lg focus:outline-none transition-colors resize-none ${
+                    errors.message
+                      ? "border-destructive"
+                      : "border-border focus:border-foreground"
+                  }`}
+                  placeholder="Cuéntame sobre tu proyecto..."
+                  disabled={isSubmitting}
+                />
+                {errors.message && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-destructive"
+                  >
+                    {errors.message}
+                  </motion.p>
+                )}
+                <p className="text-xs text-muted-foreground text-right">
+                  {formData.message.length}/1000
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <button
+                  type="submit"
+                  disabled={isSubmitting || isSuccess}
+                  className={`w-full md:w-auto px-12 py-4 text-caption tracking-widest transition-all duration-300 ${
+                    isSuccess
+                      ? "bg-green-600 text-primary-foreground"
+                      : "bg-foreground text-background hover:opacity-90"
+                  } disabled:cursor-not-allowed`}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Enviando...
+                    </span>
+                  ) : isSuccess ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      ¡Enviado!
+                    </span>
+                  ) : (
+                    "Enviar mensaje"
+                  )}
+                </button>
+              </motion.div>
+            </form>
+          </motion.div>
         </div>
       </div>
     </section>
