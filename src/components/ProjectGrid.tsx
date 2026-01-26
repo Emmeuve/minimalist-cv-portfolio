@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project-2.jpg";
@@ -29,40 +30,58 @@ const projects: Project[] = [
 ];
 
 const sizeClasses = {
-  small: "col-span-1 row-span-1 aspect-square",
-  medium: "col-span-1 md:col-span-1 row-span-1 aspect-[4/5]",
-  large: "col-span-1 md:col-span-1 row-span-2 aspect-[3/4] md:aspect-auto",
-  wide: "col-span-1 md:col-span-2 row-span-1 aspect-[16/9]",
+  small: "col-span-1 row-span-1",
+  medium: "col-span-1 row-span-1",
+  large: "col-span-1 row-span-2",
+  wide: "col-span-1 md:col-span-2 row-span-1",
+};
+
+const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`group relative overflow-hidden cursor-pointer bg-card ${sizeClasses[project.size]}`}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay: index * 0.08 }}
+      style={{ scale }}
+    >
+      <motion.div className="w-full h-full" style={{ y }}>
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+      </motion.div>
+
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/80 transition-colors duration-500 flex items-end p-4 md:p-6">
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 text-background">
+          <p className="text-caption mb-1">{project.category}</p>
+          <h3 className="text-title text-lg md:text-xl">{project.title}</h3>
+        </div>
+      </div>
+    </motion.div>
+  );
 };
 
 const ProjectGrid = () => {
   return (
-    <section className="w-full py-4 md:py-6">
+    <section id="proyectos" className="w-full py-4 md:py-6">
       <div className="container px-4 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 auto-rows-[200px] md:auto-rows-[280px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 auto-rows-[250px] md:auto-rows-[300px]">
           {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              className={`group relative overflow-hidden cursor-pointer bg-card ${sizeClasses[project.size]}`}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
-              <img
-                src={project.image}
-                alt={project.title}
-                className="image-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/80 transition-colors duration-500 flex items-end p-4 md:p-6">
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 text-background">
-                  <p className="text-caption mb-1">{project.category}</p>
-                  <h3 className="text-title text-lg md:text-xl">{project.title}</h3>
-                </div>
-              </div>
-            </motion.div>
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
       </div>
