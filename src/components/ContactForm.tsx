@@ -1,194 +1,320 @@
-// components/Contact.tsx
-import { motion } from "framer-motion";
-import { portfolioData } from "../data/portfolio-data";
-import { Mail, MapPin, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { z } from "zod";
+import { useToast } from "@/hooks/use-toast";
 
-export const Contact = () => {
-  const { personal } = portfolioData;
-  const [formData, setFormData] = useState({
+const contactSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, { message: "El nombre es requerido" })
+    .max(100, { message: "El nombre debe tener menos de 100 caracteres" }),
+  email: z
+    .string()
+    .trim()
+    .min(1, { message: "El email es requerido" })
+    .email({ message: "Email inválido" })
+    .max(255, { message: "El email debe tener menos de 255 caracteres" }),
+  message: z
+    .string()
+    .trim()
+    .min(1, { message: "El mensaje es requerido" })
+    .max(1000, { message: "El mensaje debe tener menos de 1000 caracteres" }),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+}
+
+const ContactForm = () => {
+  const { toast } = useToast();
+  const sectionRef = useRef<HTMLElement>(null);
+  const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     message: "",
   });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const leftY = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const rightY = useTransform(scrollYProgress, [0, 1], [30, -30]);
+
+  const validateField = (field: keyof ContactFormData, value: string) => {
+    const fieldSchema = contactSchema.shape[field];
+    const result = fieldSchema.safeParse(value);
+    
+    if (!result.success) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: result.error.errors[0].message,
+      }));
+    } else {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name as keyof FormErrors];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    validateField(name as keyof ContactFormData, value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí puedes integrar con un servicio de email como EmailJS, Formspree, etc.
-    const mailtoLink = `mailto:${personal.email}?subject=Contacto desde Portfolio - ${formData.name}&body=${formData.message}%0A%0ADe: ${formData.email}`;
-    window.location.href = mailtoLink;
+    
+    const result = contactSchema.safeParse(formData);
+    
+    if (!result.success) {
+      const fieldErrors: FormErrors = {};
+      result.error.errors.forEach((error) => {
+        const field = error.path[0] as keyof FormErrors;
+        fieldErrors[field] = error.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    
+    setIsSubmitting(false);
+    setIsSuccess(true);
+    
+    toast({
+      title: "¡Mensaje enviado!",
+      description: "Gracias por tu mensaje. Te responderé pronto.",
+    });
+
+    setTimeout(() => {
+      setFormData({ name: "", email: "", message: "" });
+      setIsSuccess(false);
+    }, 3000);
   };
 
   return (
-    <section id="contact" className="py-24 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-      </div>
-
-      <div className="container mx-auto px-6 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-5xl font-bold text-white mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Trabajemos Juntos
-          </h2>
-          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            ¿Tienes un proyecto en mente? Me encantaría escuchar sobre él y ver cómo puedo ayudarte
-          </p>
-        </motion.div>
-
-        <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12">
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="space-y-8"
-          >
-            <div>
-              <h3 className="text-3xl font-bold text-white mb-6">
-                Información de Contacto
-              </h3>
-              <p className="text-slate-300 text-lg leading-relaxed">
-                Siempre estoy abierto a discutir nuevos proyectos, oportunidades creativas o asociaciones. No dudes en contactarme.
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              <Card className="bg-slate-800/50 border-purple-500/20 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                      <Mail className="w-6 h-6 text-purple-400" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-400 mb-1">Email</p>
-                      <a
-                        href={`mailto:${personal.email}`}
-                        className="text-white hover:text-purple-400 transition-colors"
-                      >
-                        {personal.email}
-                      </a>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-slate-800/50 border-purple-500/20 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-blue-400" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-400 mb-1">Ubicación</p>
-                      <p className="text-white">{personal.location}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Availability badge */}
-            <motion.div
-              animate={{
-                scale: [1, 1.05, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-              }}
-              className="inline-block"
+    <section id="contacto" ref={sectionRef} className="w-full py-24 md:py-32 bg-background overflow-hidden">
+      <div className="container px-4 md:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+          {/* Left Column - Info */}
+          <motion.div style={{ y: leftY }}>
+            <motion.h2
+              className="text-caption mb-6 text-muted-foreground"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
             >
-              <div className="flex items-center gap-3 bg-green-500/10 border border-green-500/30 rounded-lg px-6 py-3">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-green-400 font-medium">
-                  Disponible para nuevos proyectos
-                </span>
-              </div>
+              Contacto
+            </motion.h2>
+            <motion.p
+              className="text-body text-lg md:text-xl lg:text-2xl leading-relaxed mb-8"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              ¿Tienes un proyecto en mente? Me encantaría escucharte 
+              y explorar cómo puedo ayudarte a hacerlo realidad.
+            </motion.p>
+            
+            <motion.div
+              className="space-y-4 text-body text-muted-foreground"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <p>email@tudominio.com</p>
+              <p>LinkedIn · Dribbble · Behance</p>
             </motion.div>
           </motion.div>
 
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <Card className="bg-slate-800/50 border-purple-500/20 backdrop-blur-sm">
-              <CardContent className="p-8">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
-                      Nombre
-                    </label>
-                    <Input
-                      id="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-purple-500"
-                      placeholder="Tu nombre"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-purple-500"
-                      placeholder="tu@email.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">
-                      Mensaje
-                    </label>
-                    <Textarea
-                      id="message"
-                      required
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      rows={6}
-                      className="bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-purple-500 resize-none"
-                      placeholder="Cuéntame sobre tu proyecto..."
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    size="lg"
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+          {/* Right Column - Form */}
+          <motion.div style={{ y: rightY }}>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="space-y-2"
+              >
+                <label htmlFor="name" className="text-caption block text-muted-foreground">
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`w-full bg-transparent border-b-2 py-3 text-body text-lg focus:outline-none transition-colors ${
+                    errors.name
+                      ? "border-destructive"
+                      : "border-border focus:border-foreground"
+                  }`}
+                  placeholder="Tu nombre"
+                  disabled={isSubmitting}
+                />
+                {errors.name && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-destructive"
                   >
-                    <Send className="w-4 h-4 mr-2" />
-                    Enviar Mensaje
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+                    {errors.name}
+                  </motion.p>
+                )}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="space-y-2"
+              >
+                <label htmlFor="email" className="text-caption block text-muted-foreground">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`w-full bg-transparent border-b-2 py-3 text-body text-lg focus:outline-none transition-colors ${
+                    errors.email
+                      ? "border-destructive"
+                      : "border-border focus:border-foreground"
+                  }`}
+                  placeholder="tu@email.com"
+                  disabled={isSubmitting}
+                />
+                {errors.email && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-destructive"
+                  >
+                    {errors.email}
+                  </motion.p>
+                )}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="space-y-2"
+              >
+                <label htmlFor="message" className="text-caption block text-muted-foreground">
+                  Mensaje
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  rows={4}
+                  className={`w-full bg-transparent border-b-2 py-3 text-body text-lg focus:outline-none transition-colors resize-none ${
+                    errors.message
+                      ? "border-destructive"
+                      : "border-border focus:border-foreground"
+                  }`}
+                  placeholder="Cuéntame sobre tu proyecto..."
+                  disabled={isSubmitting}
+                />
+                {errors.message && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-destructive"
+                  >
+                    {errors.message}
+                  </motion.p>
+                )}
+                <p className="text-xs text-muted-foreground text-right">
+                  {formData.message.length}/1000
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <button
+                  type="submit"
+                  disabled={isSubmitting || isSuccess}
+                  className={`w-full md:w-auto px-12 py-4 text-caption tracking-widest transition-all duration-300 ${
+                    isSuccess
+                      ? "bg-green-600 text-primary-foreground"
+                      : "bg-foreground text-background hover:opacity-90"
+                  } disabled:cursor-not-allowed`}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Enviando...
+                    </span>
+                  ) : isSuccess ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      ¡Enviado!
+                    </span>
+                  ) : (
+                    "Enviar mensaje"
+                  )}
+                </button>
+              </motion.div>
+            </form>
           </motion.div>
         </div>
       </div>
     </section>
   );
 };
+
+export default ContactForm;

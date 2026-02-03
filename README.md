@@ -1,254 +1,73 @@
-# 🎨 Portfolio Moderno - React + TypeScript + Tailwind CSS
+# Welcome to your Lovable project
 
-Un portfolio profesional y moderno construido con las últimas tecnologías web.
+## Project info
 
-## ✨ Características
+**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
-- 🎯 **Diseño Moderno y Responsivo**: Se adapta perfectamente a cualquier dispositivo
-- 🎨 **Animaciones Fluidas**: Transiciones y efectos con Framer Motion
-- 🎭 **Componentes shadcn/ui**: UI components de alta calidad
-- 📱 **Mobile-First**: Optimizado para dispositivos móviles
-- ⚡ **Performance Optimizado**: Carga rápida y experiencia fluida
-- 🎯 **SEO Friendly**: Optimizado para motores de búsqueda
-- 🌙 **Tema Oscuro Elegante**: Diseño oscuro profesional
+## How can I edit this code?
 
-## 🚀 Stack Tecnológico
+There are several ways of editing your application.
 
-- **Framework**: React 18 + Vite
-- **Lenguaje**: TypeScript
-- **Estilos**: Tailwind CSS
-- **Animaciones**: Framer Motion
-- **UI Components**: shadcn/ui
-- **Iconos**: Lucide React
+**Use Lovable**
 
-## 📦 Instalación
+Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
 
-### Prerequisitos
+Changes made via Lovable will be committed automatically to this repo.
 
-- Node.js 18+ 
-- npm o pnpm
+**Use your preferred IDE**
 
-### Pasos de Instalación
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-1. **Clonar el repositorio**
-```bash
-git clone https://github.com/tu-usuario/tu-portfolio.git
-cd tu-portfolio
-```
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-2. **Instalar dependencias**
-```bash
-npm install
-# o
-pnpm install
-```
+Follow these steps:
 
-3. **Instalar dependencias adicionales**
-```bash
-# Framer Motion para animaciones
-npm install framer-motion
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
 
-# Lucide React para iconos
-npm install lucide-react
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
 
-# Si no tienes shadcn/ui configurado
-npx shadcn-ui@latest init
-npx shadcn-ui@latest add button card badge input textarea
-```
+# Step 3: Install the necessary dependencies.
+npm i
 
-4. **Iniciar servidor de desarrollo**
-```bash
+# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
-# o
-pnpm dev
 ```
 
-5. **Abrir en el navegador**
-```
-http://localhost:5173
-```
+**Edit a file directly in GitHub**
 
-## 🎨 Personalización
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-### 1. Datos Personales
+**Use GitHub Codespaces**
 
-Edita el archivo `src/data/portfolio-data.ts` con tu información:
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-```typescript
-export const portfolioData: PortfolioData = {
-  personal: {
-    name: "Tu Nombre",
-    title: "Tu Título Profesional",
-    location: "Tu Ciudad, País",
-    email: "tu@email.com",
-    // ... más campos
-  },
-  // ... resto de la configuración
-};
-```
+## What technologies are used for this project?
 
-### 2. Colores y Tema
+This project is built with:
 
-Modifica `tailwind.config.js` para cambiar los colores:
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
 
-```javascript
-theme: {
-  extend: {
-    colors: {
-      // Personaliza tus colores aquí
-    },
-  },
-}
-```
+## How can I deploy this project?
 
-### 3. Fuentes
+Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 
-En `index.css` puedes cambiar las fuentes de Google Fonts:
+## Can I connect a custom domain to my Lovable project?
 
-```css
-@import url('https://fonts.googleapis.com/css2?family=Tu-Fuente:wght@300;400;700&display=swap');
-```
+Yes, you can!
 
-## 📁 Estructura del Proyecto
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
-```
-portfolio/
-├── src/
-│   ├── components/
-│   │   ├── Hero.tsx           # Sección hero/inicio
-│   │   ├── Projects.tsx       # Sección de proyectos
-│   │   ├── Experience.tsx     # Experiencia laboral
-│   │   ├── Skills.tsx         # Habilidades técnicas
-│   │   ├── Contact.tsx        # Formulario de contacto
-│   │   ├── Navigation.tsx     # Barra de navegación
-│   │   └── Footer.tsx         # Pie de página
-│   ├── data/
-│   │   └── portfolio-data.ts  # Todos tus datos
-│   ├── types/
-│   │   └── portfolio.ts       # TypeScript types
-│   ├── App.tsx                # Componente principal
-│   └── index.css              # Estilos globales
-├── public/                    # Archivos estáticos
-├── tailwind.config.js         # Configuración de Tailwind
-├── tsconfig.json              # Configuración de TypeScript
-└── package.json
-```
-
-## 🎯 Secciones del Portfolio
-
-1. **Hero**: Presentación inicial con tu nombre, título y enlaces sociales
-2. **Proyectos**: Showcase de tus mejores proyectos con detalles
-3. **Experiencia**: Timeline de tu experiencia laboral
-4. **Habilidades**: Visualización de tus skills técnicos
-5. **Contacto**: Formulario y datos de contacto
-
-## 🚀 Deploy
-
-### Vercel (Recomendado)
-
-```bash
-# Instalar Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-```
-
-### Netlify
-
-```bash
-# Build
-npm run build
-
-# La carpeta dist/ es tu build de producción
-```
-
-### GitHub Pages
-
-Agrega a `vite.config.ts`:
-
-```typescript
-export default defineConfig({
-  base: '/nombre-repo/',
-  // ...
-})
-```
-
-Luego:
-```bash
-npm run build
-# Push la carpeta dist/ a la rama gh-pages
-```
-
-## 📝 Scripts Disponibles
-
-```bash
-# Desarrollo
-npm run dev
-
-# Build de producción
-npm run build
-
-# Preview del build
-npm run preview
-
-# Linting
-npm run lint
-```
-
-## 🎨 Personalización Avanzada
-
-### Agregar más secciones
-
-1. Crea un nuevo componente en `src/components/`
-2. Importa y úsalo en `App.tsx`
-3. Agrega los datos necesarios en `portfolio-data.ts`
-
-### Cambiar animaciones
-
-Modifica los valores de Framer Motion en cada componente:
-
-```typescript
-<motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6 }}
->
-```
-
-## 🤝 Contribuciones
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el proyecto
-2. Crea tu Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
-
-## 💡 Tips
-
-- Usa imágenes optimizadas (WebP) para mejor rendimiento
-- Mantén los datos en `portfolio-data.ts` actualizados
-- Prueba en diferentes dispositivos antes de deployar
-- Usa herramientas como Lighthouse para optimizar el performance
-
-## 🆘 Soporte
-
-Si tienes alguna pregunta o problema, puedes:
-
-- Abrir un issue en GitHub
-- Contactarme por email: tu@email.com
-- Consultar la documentación de las tecnologías usadas
-
-## 🎉 ¡Listo!
-
-Ahora tienes un portfolio profesional y moderno. Personalízalo con tu información y proyectos, y compártelo con el mundo.
-
----
-
-Hecho con ❤️ usando React, TypeScript y Tailwind CSS.   
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
