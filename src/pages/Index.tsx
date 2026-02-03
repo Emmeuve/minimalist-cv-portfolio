@@ -6,12 +6,8 @@ import { Footer } from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <ProjectGrid />
-  <About />
-  <Contact />
-      <Footer />
+    <div>
+      <h1>Index viva</h1>
     </div>
   );
 };
