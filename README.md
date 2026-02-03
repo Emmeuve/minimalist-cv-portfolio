@@ -251,4 +251,4 @@ Ahora tienes un portfolio profesional y moderno. Personalízalo con tu informaci
 
 ---
 
-Hecho con ❤️ usando React, TypeScript y Tailwind CSS
+Hecho con ❤️ usando React, TypeScript y Tailwind CSS.   
