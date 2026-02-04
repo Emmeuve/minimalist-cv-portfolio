@@ -17,7 +17,7 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-caption opacity-70">© 2024 tu.nombre</p>
+            <p className="text-caption opacity-70">© 2024 Emmeuve</p>
           </motion.div>
 
           <motion.nav

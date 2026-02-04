@@ -113,7 +113,7 @@ const Header = () => {
               <span className="w-3 h-3 rounded-full bg-muted-foreground/40" />
               <span className="w-3 h-3 rounded-full bg-muted-foreground/40" />
             </div>
-            <span className="ml-2">~/portfolio/tu.nombre</span>
+            <span className="ml-2">~/portfolio/Michel.Valenzuela</span>
           </motion.div>
 
           {/* Code-style intro */}
@@ -142,7 +142,7 @@ const Header = () => {
           >
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter">
               <span className="text-primary-foreground/40">{">"} </span>
-              tu.nombre
+              Michel Valenzuela
             </h1>
             <p className="text-lg md:text-xl font-light">
               <span className="text-primary-foreground/40">{"=>"} </span>
@@ -161,14 +161,14 @@ const Header = () => {
               <span className="text-primary-foreground/50">const </span>
               <span className="text-primary-foreground">role</span>
               <span className="text-primary-foreground/50"> = </span>
-              <span className="text-primary-foreground">"Diseñador UX/UI"</span>
+              <span className="text-primary-foreground">"Diseñador Gráfico - UX/UI"</span>
               <span className="text-primary-foreground/50">;</span>
             </p>
             <p>
               <span className="text-primary-foreground/50">const </span>
               <span className="text-primary-foreground">location</span>
               <span className="text-primary-foreground/50"> = </span>
-              <span className="text-primary-foreground">"Madrid, España"</span>
+              <span className="text-primary-foreground">"Santiago, Chile"</span>
               <span className="text-primary-foreground/50">;</span>
             </p>
             <p>
