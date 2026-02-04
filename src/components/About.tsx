@@ -6,8 +6,8 @@ const skills = [
   { name: "ui_design", level: 95 },
   { name: "ux_research", level: 88 },
   { name: "prototyping", level: 92 },
-  { name: "design_systems", level: 85 },
-  { name: "figma", level: 96 },
+  { name: "design_systems", level: 60 },
+  { name: "figma", level: 80 },
   { name: "react", level: 78 },
   { name: "typescript", level: 72 },
   { name: "html_css", level: 90 },
@@ -16,6 +16,7 @@ const skills = [
 const experience = [
   { role: "senior_ui_designer", company: "tech_corp", period: "2022 — present", status: "active" },
   { role: "ux_designer", company: "startup_inc", period: "2020 — 2022", status: "completed" },
+  { role: "visual_designer", company: "agency_ltd", period: "2018 — 2020", status: "completed" },
   { role: "visual_designer", company: "agency_ltd", period: "2018 — 2020", status: "completed" },
 ];
 
@@ -97,13 +98,13 @@ const About = () => {
             >
               <p>
                 <span className="text-muted-foreground">const </span>
-                <span className="text-foreground">developer</span>
+                <span className="text-foreground">designer</span>
                 <span className="text-muted-foreground"> = </span>
                 <span className="text-foreground">{`{`}</span>
               </p>
               <p className="pl-4">
                 <span className="text-muted-foreground">name: </span>
-                <span className="text-foreground">"tu.nombre"</span>
+                <span className="text-foreground">"michel.valenzuela"</span>
                 <span className="text-muted-foreground">,</span>
               </p>
               <p className="pl-4">
@@ -113,7 +114,7 @@ const About = () => {
               </p>
               <p className="pl-4">
                 <span className="text-muted-foreground">location: </span>
-                <span className="text-foreground">"Madrid, ES"</span>
+                <span className="text-foreground">"Santiago, CL"</span>
                 <span className="text-muted-foreground">,</span>
               </p>
               <p className="pl-4">
