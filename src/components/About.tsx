@@ -213,6 +213,56 @@ const About = () => {
                 ))}
               </ul>
             </motion.div>
+
+            {/* Education Section */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <div className="flex items-center gap-2 text-xs mb-4 text-muted-foreground">
+                <span className="opacity-50">$ </span>
+                <span>cat /education/*.cert</span>
+              </div>
+
+              <ul className="space-y-3 text-sm">
+                {[
+                  { title: "diseño_gráfico_profesional", institution: "instituto_profesional_aiep", year: "2021", type: "título" },
+                  { title: "bootcamp_ux_ui_design", institution: "talento_digital", year: "2024", type: "certificación" },
+                  { title: "bootcamp_ruby_on_rails", institution: "talento_digital", year: "2023", type: "certificación" },
+                ].map((edu, i) => (
+                  <motion.li
+                    key={edu.title}
+                    className="border border-border p-3 space-y-1"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground opacity-60">
+                        cert #{String(i + 1).padStart(3, "0")}
+                      </span>
+                      <span className="text-[10px] px-2 py-0.5 bg-accent text-accent-foreground">
+                        {edu.type}
+                      </span>
+                    </div>
+                    <p className="font-medium">
+                      <span className="text-muted-foreground opacity-60">{">"} </span>
+                      {edu.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      @ {edu.institution} · {edu.year}
+                    </p>
+                  </motion.li>
+                ))}
+              </ul>
+
+              <p className="text-xs text-muted-foreground mt-3 opacity-60">
+                {"=>"} 3 certificates verified
+              </p>
+            </motion.div>
           </motion.div>
         </div>
       </div>
