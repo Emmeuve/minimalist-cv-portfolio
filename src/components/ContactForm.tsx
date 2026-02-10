@@ -187,17 +187,27 @@ const ContactForm = () => {
               </p>
               <p className="pl-4">
                 <span className="text-muted-foreground">email: </span>
-                <span className="text-foreground">"email@tudominio.com"</span>
+                <span className="text-foreground">"michelvalencastillo@gmail.com"</span>
+                <span className="text-muted-foreground">,</span>
+              </p>
+              <p className="pl-4">
+                <span className="text-muted-foreground">phone: </span>
+                <span className="text-foreground">"+56 9 4794 7310"</span>
                 <span className="text-muted-foreground">,</span>
               </p>
               <p className="pl-4">
                 <span className="text-muted-foreground">linkedin: </span>
-                <span className="text-foreground">"@tunombre"</span>
+                <span className="text-foreground">"@michelvalenzuelacastillo"</span>
                 <span className="text-muted-foreground">,</span>
               </p>
               <p className="pl-4">
-                <span className="text-muted-foreground">github: </span>
-                <span className="text-foreground">"@tunombre"</span>
+                <span className="text-muted-foreground">behance: </span>
+                <span className="text-foreground">"behance.net/Emmeuve"</span>
+                <span className="text-muted-foreground">,</span>
+              </p>
+              <p className="pl-4">
+                <span className="text-muted-foreground">portfolio: </span>
+                <span className="text-foreground">"emmeuve.github.io"</span>
               </p>
               <p>
                 <span className="text-foreground">{`}`}</span>
