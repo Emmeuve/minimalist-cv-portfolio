@@ -36,7 +36,7 @@ const Footer = () => {
 >
   <p className="text-xs opacity-50">
     <span className="opacity-60">{"// "}</span>
-    © 2024 tu.nombre
+    © 2025 michel.valenzuela.castillo
   </p>
   <p className="text-xs opacity-40">
     <span className="opacity-60">{"// "}</span>
@@ -75,13 +75,15 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             {[
-              { name: "LinkedIn", prefix: "@" },
-              { name: "GitHub", prefix: "git:" },
-              { name: "Dribbble", prefix: "~/" },
+              { name: "LinkedIn", prefix: "@", href: "https://linkedin.com/in/michelvalenzuelacastillo" },
+              { name: "Behance", prefix: "~/", href: "https://behance.net/Emmeuve" },
+              { name: "Portfolio", prefix: "git:", href: "https://emmeuve.github.io" },
             ].map((social) => (
               <a
                 key={social.name}
-                href="#"
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-xs hover:opacity-100 opacity-60 transition-opacity duration-300 group flex items-center"
               >
                 <span className="opacity-50 group-hover:opacity-70">{social.prefix}</span>

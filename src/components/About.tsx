@@ -3,21 +3,20 @@ import { useRef } from "react";
 import { Progress } from "@/components/ui/progress";
 
 const skills = [
-  { name: "ui_design", level: 95 },
-  { name: "ux_research", level: 88 },
-  { name: "prototyping", level: 92 },
-  { name: "design_systems", level: 60 },
-  { name: "figma", level: 80 },
-  { name: "react", level: 78 },
-  { name: "typescript", level: 72 },
-  { name: "html_css", level: 90 },
+  { name: "figma", level: 92 },
+  { name: "adobe_xd", level: 85 },
+  { name: "illustrator", level: 88 },
+  { name: "photoshop", level: 90 },
+  { name: "html5_css3", level: 85 },
+  { name: "javascript", level: 70 },
+  { name: "ruby_on_rails", level: 65 },
+  { name: "wordpress", level: 78 },
 ];
 
 const experience = [
-  { role: "senior_ui_designer", company: "tech_corp", period: "2022 — present", status: "active" },
-  { role: "ux_designer", company: "startup_inc", period: "2020 — 2022", status: "completed" },
-  { role: "visual_designer", company: "agency_ltd", period: "2018 — 2020", status: "completed" },
-  { role: "visual_designer", company: "agency_ltd", period: "2018 — 2020", status: "completed" },
+  { role: "diseñador_independiente", company: "freelance", period: "2024 — actualidad", status: "active" },
+  { role: "admin_sistemas", company: "tivit", period: "2018 — 2025", status: "completed" },
+  { role: "operador_sistemas_I", company: "dxc_technology", period: "2016 — 2017", status: "completed" },
 ];
 
 const About = () => {
@@ -73,18 +72,18 @@ const About = () => {
             >
               <p className="text-sm md:text-base leading-relaxed">
                 <span className="text-muted-foreground opacity-60">{"// "}</span>
-                Diseñador UX/UI con más de 5 años de experiencia creando 
-                experiencias digitales memorables.
+                Diseñador Gráfico con especialización en UX/UI y Desarrollo 
+                Web Front-End.
               </p>
               <p className="text-sm md:text-base leading-relaxed">
                 <span className="text-muted-foreground opacity-60">{"// "}</span>
-                Mi enfoque combina funcionalidad con estética, siempre 
-                priorizando al usuario.
+                Combino base técnica y visual para crear soluciones digitales 
+                centradas en el usuario.
               </p>
               <p className="text-sm text-muted-foreground">
                 <span className="opacity-60">{"// "}</span>
-                Especializado en diseño de interfaces, sistemas de diseño, 
-                prototipado y dirección creativa.
+                Experiencia en branding, interfaces, prototipado y desarrollo 
+                con Ruby on Rails y PostgreSQL.
               </p>
             </motion.div>
 

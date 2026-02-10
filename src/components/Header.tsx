@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
-const glitchWords = ["developer", "designer", "creative", "coder", "builder"];
+const glitchWords = ["UX/UI Designer", "Front-End Dev", "Graphic Designer", "Creative", "Problem Solver"];
 
 const GlitchText = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -142,7 +142,7 @@ const Header = () => {
           >
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter">
               <span className="text-primary-foreground/40">{">"} </span>
-              Michel Valenzuela
+              Michel Valenzuela Castillo
             </h1>
             <p className="text-lg md:text-xl font-light">
               <span className="text-primary-foreground/40">{"=>"} </span>
@@ -161,7 +161,7 @@ const Header = () => {
               <span className="text-primary-foreground/50">const </span>
               <span className="text-primary-foreground">role</span>
               <span className="text-primary-foreground/50"> = </span>
-              <span className="text-primary-foreground">"Diseñador Gráfico - UX/UI"</span>
+              <span className="text-primary-foreground">"Diseñador UX/UI – Desarrollador Web Front-End"</span>
               <span className="text-primary-foreground/50">;</span>
             </p>
             <p>
