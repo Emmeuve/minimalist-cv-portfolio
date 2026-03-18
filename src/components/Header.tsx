@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import profileImg from "@/assets/profile.jpg";
 
 const glitchWords = ["UX/UI Designer", "Front-End Dev", "Graphic Designer", "Creative", "Problem Solver"];
 
@@ -135,19 +136,26 @@ const Header = () => {
 
           {/* Name with glitch effect */}
           <motion.div
-            className="space-y-2"
+            className="flex items-center gap-6"
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter">
-              <span className="text-primary-foreground/40">{">"} </span>
-              Michel Valenzuela Castillo
-            </h1>
-            <p className="text-lg md:text-xl font-light">
-              <span className="text-primary-foreground/40">{"=>"} </span>
-              <GlitchText />
-            </p>
+            <img
+              src={profileImg}
+              alt="Michel Valenzuela"
+              className="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover border-2 border-primary-foreground/20 shrink-0"
+            />
+            <div className="space-y-2">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter">
+                <span className="text-primary-foreground/40">{">"} </span>
+                Michel Valenzuela Castillo
+              </h1>
+              <p className="text-lg md:text-xl font-light">
+                <span className="text-primary-foreground/40">{"=>"} </span>
+                <GlitchText />
+              </p>
+            </div>
           </motion.div>
 
           {/* Code block info */}
