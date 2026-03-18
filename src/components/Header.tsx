@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import profileImg from "@/assets/profile.jpg";
 
 const glitchWords = ["UX/UI Designer", "Front-End Dev", "Graphic Designer", "Creative", "Problem Solver"];
 
