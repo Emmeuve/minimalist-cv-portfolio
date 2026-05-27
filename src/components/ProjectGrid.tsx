@@ -1,34 +1,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
-import project4 from "@/assets/project-4.jpg";
-import project5 from "@/assets/project-5.jpg";
-import project6 from "@/assets/project-6.jpg";
-import project7 from "@/assets/project-7.jpg";
-import project8 from "@/assets/project-8.jpg";
-
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  image: string;
-  size: "small" | "medium" | "large" | "wide";
-  tech: string[];
-}
-
-const projects: Project[] = [
-  { id: 1, title: "brand_identity", category: "branding", image: project1, size: "large", tech: ["figma", "ai"] },
-  { id: 2, title: "ecommerce_platform", category: "web_design", image: project2, size: "medium", tech: ["react", "ts"] },
-  { id: 3, title: "mobile_app", category: "ui_ux", image: project3, size: "small", tech: ["swift", "figma"] },
-  { id: 4, title: "editorial_design", category: "print", image: project4, size: "wide", tech: ["indesign", "ps"] },
-  { id: 5, title: "digital_campaign", category: "marketing", image: project5, size: "medium", tech: ["meta", "analytics"] },
-  { id: 6, title: "product_design", category: "3d", image: project6, size: "small", tech: ["blender", "c4d"] },
-  { id: 7, title: "photography", category: "visual", image: project7, size: "large", tech: ["lightroom", "ps"] },
-  { id: 8, title: "motion_graphics", category: "animation", image: project8, size: "wide", tech: ["ae", "figma"] },
-];
+import { projects, type Project } from "@/data/projects";
 
 const sizeClasses = {
   small: "col-span-1 row-span-1",
@@ -49,12 +23,17 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
   return (
     <motion.div
       ref={ref}
-      className={`group relative overflow-hidden cursor-pointer bg-card font-mono ${sizeClasses[project.size]}`}
+      className={`group relative overflow-hidden bg-card font-mono ${sizeClasses[project.size]}`}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.6, delay: index * 0.08 }}
     >
+      <Link
+        to={`/case-study/${project.slug}`}
+        aria-label={`Ver caso de estudio: ${project.title}`}
+        className="absolute inset-0 z-10"
+      />
       <motion.div className="w-full h-full" style={{ y }}>
         <img
           src={project.image}
@@ -64,12 +43,12 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
       </motion.div>
 
       {/* Terminal overlay */}
-      <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/90 transition-all duration-500 flex flex-col justify-end p-4 md:p-6">
+      <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/90 transition-all duration-500 flex flex-col justify-end p-4 md:p-6 pointer-events-none">
         {/* Always visible index */}
         <div className="absolute top-3 left-3 text-xs text-muted-foreground opacity-60">
           [{String(index + 1).padStart(2, "0")}]
         </div>
-        
+
         {/* Hover content */}
         <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100 text-background space-y-2">
           {/* Terminal header */}
@@ -79,17 +58,17 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
             <span className="w-2 h-2 rounded-full bg-muted/50" />
             <span className="text-[10px] ml-2 opacity-60">project.exe</span>
           </div>
-          
+
           <p className="text-[10px] uppercase tracking-widest opacity-60">
             <span className="text-background/50">// </span>
             {project.category}
           </p>
-          
+
           <h3 className="text-base md:text-lg font-medium">
             <span className="text-background/50">$ </span>
             {project.title}
           </h3>
-          
+
           {/* Tech stack */}
           <div className="flex gap-2 flex-wrap mt-2">
             {project.tech.map((t) => (
@@ -101,7 +80,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
               </span>
             ))}
           </div>
-          
+
           <p className="text-xs opacity-50 mt-3">
             <span className="text-background/40">{">"} </span>
             click to view_
